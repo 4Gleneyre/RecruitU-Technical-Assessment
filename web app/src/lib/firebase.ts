@@ -1,4 +1,11 @@
 ﻿import { getApp, getApps, initializeApp, type FirebaseApp } from "firebase/app";
+import {
+  getAI,
+  getGenerativeModel,
+  GoogleAIBackend,
+  type GenerativeModel,
+  type ModelParams,
+} from "firebase/ai";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDfZl0PUxGWt8BWRYuX5mnIM-RTynBdFqI",
@@ -10,6 +17,8 @@ export const firebaseConfig = {
 } as const;
 
 let app: FirebaseApp | undefined;
+let aiService: ReturnType<typeof getAI> | undefined;
+const modelCache = new Map<string, GenerativeModel>();
 
 export function getFirebaseApp(): FirebaseApp {
   if (app) {
@@ -23,4 +32,31 @@ export function getFirebaseApp(): FirebaseApp {
 
   app = initializeApp(firebaseConfig);
   return app;
+}
+
+function getAIService() {
+  if (!aiService) {
+    aiService = getAI(getFirebaseApp(), { backend: new GoogleAIBackend() });
+  }
+
+  return aiService;
+}
+
+type GeminiModelOptions = Omit<ModelParams, "model">;
+
+export function getGeminiModel(modelName = "gemini-2.5-flash", options?: GeminiModelOptions) {
+  if (!options && modelCache.has(modelName)) {
+    return modelCache.get(modelName)!;
+  }
+
+  const model = getGenerativeModel(getAIService(), {
+    model: modelName,
+    ...options,
+  });
+
+  if (!options) {
+    modelCache.set(modelName, model);
+  }
+
+  return model;
 }
