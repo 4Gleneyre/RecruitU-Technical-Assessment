@@ -54,10 +54,6 @@ export default function Home() {
       <main className={styles.content}>
         <header className={styles.hero}>
           <span className={styles.pill}>Talent Compass AI</span>
-          <h1 className={styles.headline}>Design your perfect hire in seconds.</h1>
-          <p className={styles.tagline}>
-            Paste a job description and let the compass outline who to target across consulting and finance talent pools.
-          </p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit}>

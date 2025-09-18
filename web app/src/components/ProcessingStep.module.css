@@ -250,6 +250,153 @@
   }
 }
 
+/* Logs section */
+.logsContainer {
+  margin-top: 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  padding-top: 16px;
+}
+
+.logsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.logsTitle {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.02em;
+}
+
+.logsToggle {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.logsToggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.logsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logItem {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.logItem.processing {
+  border-color: rgba(87, 133, 255, 0.25);
+}
+
+.logItem.completed {
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.logItem.error {
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.logIcon {
+  width: 18px;
+  height: 18px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 2px;
+}
+
+.bullet {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(87, 133, 255, 0.3);
+  border-top-color: rgba(87, 133, 255, 1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.logText {
+  flex: 1;
+  min-width: 0;
+}
+
+.logLabel {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.logDetails {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (prefers-color-scheme: light) {
+  .logsContainer {
+    border-top-color: rgba(5, 16, 39, 0.1);
+  }
+  .logsTitle {
+    color: rgba(5, 16, 39, 0.7);
+  }
+  .logsToggle {
+    background: rgba(5, 16, 39, 0.04);
+    border-color: rgba(5, 16, 39, 0.12);
+    color: rgba(5, 16, 39, 0.75);
+  }
+  .logItem {
+    background: rgba(5, 16, 39, 0.03);
+    border-color: rgba(5, 16, 39, 0.08);
+  }
+  .logItem.processing {
+    border-color: rgba(87, 133, 255, 0.2);
+  }
+  .logItem.completed {
+    border-color: rgba(34, 197, 94, 0.2);
+  }
+  .logItem.error {
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+  .logLabel {
+    color: rgba(5, 16, 39, 0.85);
+  }
+  .logDetails {
+    color: rgba(5, 16, 39, 0.55);
+  }
+}
+
 @media (prefers-color-scheme: light) {
   .step {
     background: rgba(255, 255, 255, 0.94);

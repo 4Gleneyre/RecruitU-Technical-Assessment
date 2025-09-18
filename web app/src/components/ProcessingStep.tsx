@@ -3,12 +3,24 @@
 import styles from "./ProcessingStep.module.css";
 import { CandidateProfile, StepStatus } from "@/types/candidate";
 
+type LogStatus = "pending" | "processing" | "completed" | "error";
+
+export interface ProcessingLogItem {
+  id: string;
+  label: string;
+  status: LogStatus;
+  details?: string;
+}
+
 interface ProcessingStepProps {
   stepNumber: number;
   title: string;
   status: StepStatus;
   description: string;
   result?: CandidateProfile | null;
+  logs?: ProcessingLogItem[];
+  logsCollapsed?: boolean;
+  onToggleLogs?: () => void;
 }
 
 export function ProcessingStep({ 
@@ -16,7 +28,10 @@ export function ProcessingStep({
   title, 
   status, 
   description, 
-  result 
+  result,
+  logs,
+  logsCollapsed,
+  onToggleLogs
 }: ProcessingStepProps) {
   const getStatusIcon = () => {
     switch (status) {
@@ -133,6 +148,44 @@ export function ProcessingStep({
           <div className={styles.progressBar}>
             <div className={styles.progressFill}></div>
           </div>
+        </div>
+      )}
+
+      {logs && logs.length > 0 && (
+        <div className={styles.logsContainer}>
+          <div className={styles.logsHeader}>
+            <h4 className={styles.logsTitle}>Live activity</h4>
+            {typeof logsCollapsed === "boolean" && (
+              <button type="button" className={styles.logsToggle} onClick={onToggleLogs}>
+                {logsCollapsed ? `Show all (${logs.length})` : "Show latest only"}
+              </button>
+            )}
+          </div>
+          <ul className={styles.logsList}>
+            {(logsCollapsed ? [logs[logs.length - 1]] : logs).map((log) => (
+              <li key={log.id} className={`${styles.logItem} ${styles[log.status]}`}>
+                <span className={styles.logIcon} aria-hidden>
+                  {log.status === "completed" ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : log.status === "processing" ? (
+                    <span className={styles.spinner}></span>
+                  ) : log.status === "error" ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <span className={styles.bullet} />
+                  )}
+                </span>
+                <div className={styles.logText}>
+                  <div className={styles.logLabel}>{log.label}</div>
+                  {log.details && <div className={styles.logDetails}>{log.details}</div>}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

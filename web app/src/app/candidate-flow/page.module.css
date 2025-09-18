@@ -6,8 +6,12 @@
     radial-gradient(circle at bottom right, rgba(255, 94, 247, 0.3), transparent 50%),
     #050e25;
   color: rgba(255, 255, 255, 0.92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: var(--font-geist-sans);
-  overflow-x: hidden;
+  overflow: hidden;
+  text-align: center;
 }
 
 .backgroundGlow {
