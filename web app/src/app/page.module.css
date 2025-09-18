@@ -1,0 +1,128 @@
+﻿.page {
+  position: relative;
+  min-height: 100svh;
+  padding: 80px 24px;
+  background: #f8fafc;
+  color: #1e293b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-geist-sans);
+  text-align: center;
+}
+
+.content {
+  position: relative;
+  width: min(600px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 1;
+  align-items: center;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 600;
+  margin: 0;
+  color: #1e293b;
+}
+
+.form {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  text-align: left;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  padding: 16px;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.counter {
+  font-family: var(--font-geist-mono);
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.primaryAction {
+  background: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primaryAction:hover {
+  background: #2563eb;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 40px 16px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .form {
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .formFooter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .primaryAction {
+    width: 100%;
+    text-align: center;
+  }
+}
