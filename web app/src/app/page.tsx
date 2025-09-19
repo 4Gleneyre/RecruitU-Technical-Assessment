@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FirebaseInit } from "@/components/FirebaseInit";
-import styles from "./page.module.css";
+import styles from "./candidate-flow/page.module.css";
 
 const MAX_CHARACTERS = 2000;
 export const JOB_DESCRIPTION_STORAGE_KEY = "recruitu:job-description";

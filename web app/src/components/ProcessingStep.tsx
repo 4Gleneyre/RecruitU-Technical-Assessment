@@ -21,6 +21,7 @@ interface ProcessingStepProps {
   logs?: ProcessingLogItem[];
   logsCollapsed?: boolean;
   onToggleLogs?: () => void;
+  progress?: number;
 }
 
 export function ProcessingStep({ 
@@ -31,7 +32,8 @@ export function ProcessingStep({
   result,
   logs,
   logsCollapsed,
-  onToggleLogs
+  onToggleLogs,
+  progress
 }: ProcessingStepProps) {
   const getStatusIcon = () => {
     switch (status) {
@@ -146,7 +148,10 @@ export function ProcessingStep({
       {status === "processing" && (
         <div className={styles.processingIndicator}>
           <div className={styles.progressBar}>
-            <div className={styles.progressFill}></div>
+            <div
+              className={styles.progressFill}
+              style={typeof progress === "number" ? { width: `${Math.max(0, Math.min(100, progress))}%`, animation: "none" } : undefined}
+            ></div>
           </div>
         </div>
       )}
