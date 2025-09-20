@@ -11,6 +11,9 @@ export default function TopCandidatesPage() {
 	const [topCandidates, setTopCandidates] = useState<ScoredCandidate[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+	const [expExpanded, setExpExpanded] = useState<Record<string, boolean>>({});
+	const PAGE_SIZE = 20;
+	const [page, setPage] = useState(0);
 
 	const getBestExperience = (experiences: any[]): any | undefined => {
 		if (!Array.isArray(experiences) || experiences.length === 0) return undefined;
@@ -79,7 +82,7 @@ export default function TopCandidatesPage() {
 
 			candidates.sort((a, b) => b.compatibilityScore - a.compatibilityScore);
 
-			setTopCandidates(candidates.slice(0, 50));
+			setTopCandidates(candidates);
 		} catch (error) {
 			console.error("Failed to load or process candidate data", error);
 		} finally {
@@ -96,13 +99,19 @@ export default function TopCandidatesPage() {
 		);
 	}
 
+	const total = topCandidates.length;
+	const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+	const safePage = Math.min(page, totalPages - 1);
+	const startIndex = safePage * PAGE_SIZE;
+	const pageCandidates = topCandidates.slice(startIndex, startIndex + PAGE_SIZE);
+
 	return (
 		<div className={styles.page}>
 			<div className={styles.backgroundGlow} aria-hidden />
 			<main className={styles.content}>
 				<header className={styles.header}>
 					<span className={styles.pill}>Talent Compass AI</span>
-					<h1 className={styles.headline}>Top 50 Candidates</h1>
+					<h1 className={styles.headline}>Candidates</h1>
 					<p className={styles.tagline}>Ranked by AI compatibility with your job description</p>
 					<button 
 						className={styles.retryButton}
@@ -113,15 +122,17 @@ export default function TopCandidatesPage() {
 				</header>
 
 				<div className={styles.candidateList}>
-					{topCandidates.length > 0 ? (
-						topCandidates.map((candidate, index) => {
+					{pageCandidates.length > 0 ? (
+						pageCandidates.map((candidate, index) => {
 							const isExpanded = !!expanded[candidate.id];
 							const experiences: any[] = Array.isArray((candidate as any)?.linkedin?.experiences)
 								? ((candidate as any).linkedin.experiences as any[])
 								: [];
+							const isExpExpanded = !!expExpanded[candidate.id];
+							const displayedExperiences = experiences.length > 3 && !isExpExpanded ? experiences.slice(0, 3) : experiences;
 							return (
 								<div key={candidate.id} className={styles.candidateCard}>
-									<div className={styles.rank}>{index + 1}</div>
+									<div className={styles.rank}>{startIndex + index + 1}</div>
 									<div className={styles.score}>
 										<span className={styles.scoreValue}>{candidate.compatibilityScore}</span>
 										<span className={styles.scoreLabel}>Score</span>
@@ -177,7 +188,7 @@ export default function TopCandidatesPage() {
 													<h4 className={styles.sectionTitle}>Professional Experience</h4>
 												</div>
 												<div className={styles.experienceTimeline}>
-													{experiences.map((e: any, i: number) => (
+													{displayedExperiences.map((e: any, i: number) => (
 														<div key={i} className={styles.experienceItem}>
 															<div className={styles.experienceDot}>
 																<div className={styles.experienceDotInner} />
@@ -205,9 +216,24 @@ export default function TopCandidatesPage() {
 																		</div>
 																	)}
 																</div>
-															</div>
+																</div>
 														</div>
 													))}
+													{experiences.length > 3 && (
+														<div style={{ marginTop: 8 }}>
+															<button
+																className={`${styles.logsToggle} ${isExpExpanded ? styles.logsToggleExpanded : ""}`}
+																onClick={() => setExpExpanded(prev => ({ ...prev, [candidate.id]: !prev[candidate.id] }))}
+																aria-expanded={isExpExpanded}
+																type="button"
+															>
+																{isExpExpanded ? "Show fewer roles" : "Load more roles"}
+																<svg className={styles.logsToggleIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+																	<path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+																</svg>
+															</button>
+														</div>
+													)}
 												</div>
 											</div>
 										)}
@@ -272,6 +298,30 @@ export default function TopCandidatesPage() {
 						<p>No candidates found.</p>
 					)}
 				</div>
+				{/* Pagination controls (bottom of page) */}
+				{total > 0 && (
+					<div className={styles.formFooter} style={{ marginTop: 16, width: "100%", maxWidth: 900, marginLeft: "auto", marginRight: "auto" }}>
+						<button
+							type="button"
+							className={styles.secondaryAction}
+							onClick={() => setPage(p => Math.max(0, p - 1))}
+							disabled={safePage === 0}
+						>
+							Prev
+						</button>
+						<span style={{ color: "rgba(255, 255, 255, 0.8)" }}>
+							Showing {startIndex + 1}-{Math.min(startIndex + pageCandidates.length, total)} of {total}
+						</span>
+						<button
+							type="button"
+							className={styles.secondaryAction}
+							onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+							disabled={safePage >= totalPages - 1}
+						>
+							Next
+						</button>
+					</div>
+				)}
 			</main>
 		</div>
 	);
