@@ -80,7 +80,25 @@ export default function TopCandidatesPage() {
 				})
 				.filter(c => typeof c.compatibilityScore === "number" && c.compatibilityScore >= 0);
 
-			candidates.sort((a, b) => b.compatibilityScore - a.compatibilityScore);
+			candidates.sort((a, b) => {
+				const scoreDiff = b.compatibilityScore - a.compatibilityScore;
+				if (scoreDiff !== 0) return scoreDiff;
+
+				const aProsLen = Array.isArray((a as any).pros) ? (a as any).pros.length : 0;
+				const aConsLen = Array.isArray((a as any).cons) ? (a as any).cons.length : 0;
+				const bProsLen = Array.isArray((b as any).pros) ? (b as any).pros.length : 0;
+				const bConsLen = Array.isArray((b as any).cons) ? (b as any).cons.length : 0;
+
+				// Prefer candidates that have populated pros/cons
+				const aProsConsScore = (aProsLen > 0 ? 1 : 0) + (aConsLen > 0 ? 1 : 0);
+				const bProsConsScore = (bProsLen > 0 ? 1 : 0) + (bConsLen > 0 ? 1 : 0);
+				if (bProsConsScore !== aProsConsScore) return bProsConsScore - aProsConsScore;
+
+				// Deterministic fallback: sort by name
+				const aName = ((a as any).name || "") as string;
+				const bName = ((b as any).name || "") as string;
+				return aName.localeCompare(bName, undefined, { sensitivity: "base" });
+			});
 
 			setTopCandidates(candidates);
 		} catch (error) {
