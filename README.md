@@ -2,6 +2,8 @@
 
 An AI-assisted candidate discovery demo that turns a job description into a ranked list of matching candidates. The web app guides you through four steps: generate an ideal candidate profile, search candidate IDs, fetch and score detailed profiles, and run advanced analysis with pros/cons — then presents the top candidates.
 
+Live demo link: https://my-web-app--recruitu-technical-assessment.us-central1.hosted.app/top-candidates 
+
 ## Features
 
 - AI‑driven matching
